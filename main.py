@@ -4,17 +4,24 @@ import sys
 
 # Window, Background & Color
 BLACK = (0,0,0)
-WHITE = (200,200,200)
+WHITE = (255,255,255)
 WINDOW_HEIGHT = 800
 WINDOW_WIDTH = 800
 
-
 class Cell:
-    def __init__(self, x_pos, y_pos, state):
-        self.state = state # state 0 or 1 (dead or alive)
+    def __init__(self, x_pos, y_pos, state=False):
+        self.state = state # dead or alive
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.size = 20
+
+    def draw(self, screen):
+        color = WHITE if self.state else BLACK
+        cell_rect = pygame.Rect(self.x_pos, self.y_pos, self.size, self.size)
+        if self.state:
+            pygame.draw.rect(screen, color, cell_rect, 0)
+        else:
+            pygame.draw.rect(screen, color, cell_rect, 0)
 
 # create grid
 def drawGrid():
@@ -24,14 +31,6 @@ def drawGrid():
             rect = pygame.Rect(x, y, cell_size, cell_size)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
 
-# create cell
-def drawCell(cell):
-    cell_rect = pygame.Rect(cell.x_pos, cell.y_pos, cell.size, cell.size)
-    if cell.state == 0:
-        pygame.draw.rect(SCREEN, BLACK, cell_rect, 0)
-    else:
-        pygame.draw.rect(SCREEN, WHITE, cell_rect, 0)
-
 def main():
     global SCREEN, CLOCK
     pygame.init()
@@ -39,12 +38,12 @@ def main():
     CLOCK = pygame.time.Clock()
     SCREEN.fill(WHITE)
 
-    new_cell = Cell(121, 400, 0) #create new cell
-
+    new_cell = Cell(40,40) #create new cell
+    
     while True:
         SCREEN.fill(WHITE)
         drawGrid()
-        drawCell(new_cell)
+        new_cell.draw(SCREEN)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
