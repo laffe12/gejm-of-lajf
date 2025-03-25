@@ -6,8 +6,8 @@ import random
 # Window, Background & Color
 BLACK = (0,0,0)
 WHITE = (255,255,255)
-WINDOW_HEIGHT = 800
-WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 1000
+WINDOW_WIDTH = 1500
 cell_size = 15
 
 class Cell:
@@ -33,6 +33,23 @@ def create_grid(cols, rows, cell_size):
             row.append(Cell(x_pos, y_pos))
         grid.append(row)
     return grid
+
+def check_alive_neighbors(grid, x_pos, y_pos):
+    height = len(grid)
+    width = len(grid[0])
+    neight_count = 0
+    # Toroidal wrapping where grid wraps around the edges
+    directions = [
+        (-1,-1), (0,-1), (1,-1),
+        (-1, 0),         (1, 0),
+        (-1, 1), (0, 1), (1, 1)
+    ]
+    for dx, dy in directions:
+        x_neighbor = (x_pos + dx + width) % width
+        y_neighbor = (y_pos + dy + height) % height
+        if grid[x_neighbor, y_neighbor].state:
+            neight_count += 1
+    return neight_count
 
 def main():
     global SCREEN, CLOCK
