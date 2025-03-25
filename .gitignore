@@ -1,0 +1,15 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore venv
+venv/
+.env/
+
+# Ignore logs and temp
+*.log
+tmp/
+
+# Ignore a specific file
+game_of_life_plan.txt
+rules.png
