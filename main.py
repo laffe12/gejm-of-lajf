@@ -1,12 +1,14 @@
 # Game Of Life
 import pygame
 import sys
+import random
 
 # Window, Background & Color
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 WINDOW_HEIGHT = 800
 WINDOW_WIDTH = 800
+cell_size = 15
 
 class Cell:
     def __init__(self, x_pos, y_pos, state=False):
@@ -18,18 +20,19 @@ class Cell:
     def draw(self, screen):
         color = WHITE if self.state else BLACK
         cell_rect = pygame.Rect(self.x_pos, self.y_pos, self.size, self.size)
-        if self.state:
-            pygame.draw.rect(screen, color, cell_rect, 0)
-        else:
-            pygame.draw.rect(screen, color, cell_rect, 0)
+        pygame.draw.rect(screen, color, cell_rect)
+        pygame.draw.rect(screen, (50,50,50), cell_rect, 1) # grid lines
 
-# create grid
-def drawGrid():
-    cell_size = 20
-    for x in range(0, WINDOW_WIDTH, cell_size):
-        for y in range(0, WINDOW_HEIGHT, cell_size):
-            rect = pygame.Rect(x, y, cell_size, cell_size)
-            pygame.draw.rect(SCREEN, BLACK, rect, 1)
+def create_grid(cols, rows, cell_size):
+    grid = []
+    for x in range(cols):
+        row = []
+        for y in range(rows):
+            x_pos = x * cell_size
+            y_pos = y * cell_size
+            row.append(Cell(x_pos, y_pos))
+        grid.append(row)
+    return grid
 
 def main():
     global SCREEN, CLOCK
@@ -38,20 +41,27 @@ def main():
     CLOCK = pygame.time.Clock()
     SCREEN.fill(WHITE)
 
-    new_cell = Cell(40,40) #create new cell
-    
+    # create grid
+    cols = WINDOW_WIDTH // cell_size
+    rows = WINDOW_HEIGHT // cell_size
+    grid = create_grid(cols, rows, cell_size)
+
     while True:
         SCREEN.fill(WHITE)
-        drawGrid()
-        new_cell.draw(SCREEN)
 
+        # draw grid
+        for row in grid:
+            for cell in row:
+                cell.state = random.choice([True, False])
+                cell.draw(SCREEN)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
         pygame.display.update()
-        CLOCK.tick(30)
+        CLOCK.tick(10)
 
 if __name__ == "__main__":
     main()
