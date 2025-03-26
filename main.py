@@ -91,13 +91,14 @@ def main():
     # seeds
     seed_glider(grid, 40, 40)
     seed_blinker(grid, 10, 10)
-    seed_block(grid, 60, 60)
+    seed_blinker(grid, 45, 46)
+    seed_block(grid, 58, 58)
 
     while True:
         SCREEN.fill(WHITE)
 
         # Step simulation
-        future_states = [[False for _ in range(cols)] for _ in range(rows)] # temporary create a grid of Falses states
+        next_state_grid = [[False for _ in range(cols)] for _ in range(rows)] # temporary create a grid of Falses states
         for y in range(rows):
             for x in range(cols):
                 cell = grid[y][x]
@@ -105,14 +106,14 @@ def main():
 
                 # Game rules
                 if cell.state:
-                    future_states[y][x] = (alive_neighbors in [2,3])
+                    next_state_grid[y][x] = (alive_neighbors in [2,3])
                 else:
-                    future_states[y][x] = (alive_neighbors == 3)
+                    next_state_grid[y][x] = (alive_neighbors == 3)
 
         # Update grid
         for y in range(rows):
             for x in range(cols):
-                grid[y][x].state = future_states[y][x]
+                grid[y][x].state = next_state_grid[y][x]
                 grid[y][x].draw(SCREEN)
         
         # Event handling
